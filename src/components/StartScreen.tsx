@@ -9,7 +9,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartGame }) => {
         Word Search Challenge
       </h1>
       <p className="text-xl mb-8 text-center max-w-md">
-        Find all the hidden words before time runs out! You have 3 minutes.
+        Find all the hidden words before time runs out! You have 10 minutes.
       </p>
       <button
         onClick={onStartGame}

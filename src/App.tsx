@@ -13,7 +13,7 @@ type GameState = "INITIAL" | "PLAYING" | "WON" | "LOST";
 
 function App() {
   const [gameState, setGameState] = useState<GameState>("INITIAL");
-  const [timer, setTimer] = useState(270);
+  const [timer, setTimer] = useState(600);
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
   const [foundWords, setFoundWords] = useState<string[]>([]);
   const [gridSize] = useState(10);
@@ -25,7 +25,7 @@ function App() {
 
   const handleStartGame = useCallback(() => {
     setGameState("PLAYING");
-    setTimer(270);
+    setTimer(600);
     setSelectedCells([]);
     setFoundWords([]);
     setWordList(getRandomWords(9));
@@ -126,7 +126,7 @@ function App() {
             <WordList wordList={wordList} foundWords={foundWords} />
           </div>
         </div>
-        {/* Game state overlays */}
+
         {gameState === "INITIAL" && (
           <StartScreen onStartGame={handleStartGame} />
         )}
