@@ -16,26 +16,24 @@ const DIRECTIONS = [
 export function generateWordSearchGrid(
   words: string[],
   size: number = 10
-): string[][] {
-  // Sort words by length (descending) to place longer words first
+): { grid: string[][]; placedWords: string[] } {
   const sortedWords = [...words].sort((a, b) => b.length - a.length);
-  // Initialize empty grid
   const grid: string[][] = Array(size)
     .fill(null)
     .map(() => Array(size).fill(""));
   const placedWords: string[] = [];
-  // Try to place each word
+
   for (const word of sortedWords) {
     if (placeWord(grid, word)) {
       placedWords.push(word);
     }
   }
-  // Fill remaining empty cells with random letters
+
   fillEmptyCells(grid);
-  return grid;
+  return { grid, placedWords };
 }
-/**
- * Attempts to place a word in the grid
+
+/* Attempts to place a word in the grid
  */
 function placeWord(grid: string[][], word: string): boolean {
   const size = grid.length;

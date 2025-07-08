@@ -17,22 +17,39 @@ function App() {
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
   const [foundWords, setFoundWords] = useState<string[]>([]);
   const [gridSize] = useState(10);
-  const [wordList, setWordList] = useState<string[]>(() => getRandomWords(9));
 
-  const [gridLetters, setGridLetters] = useState<string[][]>(() =>
-    generateWordSearchGrid(wordList, gridSize)
-  );
+  const [wordList, setWordList] = useState<string[]>([]);
+  const [gridLetters, setGridLetters] = useState<string[][]>([]);
+
+  // Initialize game on mount
+  useEffect(() => {
+    startNewGame();
+  }, [gridSize]);
+
+  const startNewGame = useCallback(() => {
+    const randomWords = getRandomWords(9);
+    const { grid, placedWords } = generateWordSearchGrid(randomWords, gridSize);
+    setGridLetters(grid);
+    setWordList(placedWords);
+  }, [gridSize]);
 
   const handleStartGame = useCallback(() => {
     setGameState("PLAYING");
     setTimer(600);
     setSelectedCells([]);
     setFoundWords([]);
-    setWordList(getRandomWords(9));
-    setGridLetters(generateWordSearchGrid(wordList, gridSize));
-  }, [gridSize, wordList]);
+    startNewGame();
+  }, [startNewGame]);
 
-  // Check if all words are found
+  const handleReset = useCallback(() => {
+    setTimer(600);
+    setSelectedCells([]);
+    setFoundWords([]);
+    setGameState("PLAYING");
+    startNewGame();
+  }, [startNewGame]);
+
+  // Check win condition
   useEffect(() => {
     if (gameState === "PLAYING" && foundWords.length === wordList.length) {
       setGameState("WON");
@@ -60,22 +77,10 @@ function App() {
     };
   }, [gameState]);
 
-  const handleReset = useCallback(() => {
-    setTimer(180);
-    setSelectedCells([]);
-    setFoundWords([]);
-    setGameState("PLAYING");
-
-    const newWords = getRandomWords(9);
-    setWordList(newWords);
-    setGridLetters(generateWordSearchGrid(newWords, gridSize));
-  }, [gridSize]);
-
   const checkSelection = useCallback(() => {
     if (selectedCells.length < 2) return;
 
     const word = getWordFromSelection(selectedCells, gridLetters, gridSize);
-
     const reversedWord = word.split("").reverse().join("");
 
     const wordToCheck = wordList.find((w) => w === word || w === reversedWord);
@@ -110,6 +115,7 @@ function App() {
     },
     [selectedCells, checkSelection, gameState]
   );
+
   return (
     <div className="h-dvh bg-gray-50 flex flex-col items-center p-4 relative">
       <div className="w-full h-full max-w-4xl bg-white rounded-xl shadow-md overflow-y-auto">
