@@ -121,7 +121,7 @@ function App() {
       <div className="w-full h-full max-w-4xl bg-white rounded-xl shadow-md overflow-y-auto">
         <Header timer={timer} onReset={handleReset} gameState={gameState} />
         <div className="flex flex-col md:flex-row p-4 gap-6">
-          <div className="flex-1">
+          <div className="flex-1 touch-none">
             <GameGrid
               gridLetters={gridLetters}
               selectedCells={selectedCells}
